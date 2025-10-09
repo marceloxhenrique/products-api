@@ -61,5 +61,4 @@ public class ProductController {
         productService.deleteProduct(product.get());
         return ResponseEntity.status(HttpStatus.OK).body("Product successfully deleted");
     }
-
 }
