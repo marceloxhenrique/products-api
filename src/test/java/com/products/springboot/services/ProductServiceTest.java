@@ -64,4 +64,34 @@ public class ProductServiceTest {
         assertThat(product.get().getValue()).isEqualTo(new BigDecimal("1200"));
         assertThat(product.get().getIdProduct()).isEqualTo(productID);
     }
+
+    @Test
+    public void shouldUpdateProductById(){
+        //Arrange
+        ProductRecordDto newProduct = new ProductRecordDto("Refrigerator", new BigDecimal("1200"));
+        ProductModel product = productService.saveProduct(newProduct);
+
+        //Act
+        ProductRecordDto result = new ProductRecordDto("MackBook Air", new BigDecimal("999"));
+        Optional<ProductModel> productModelUpdated = productService.updateProductById(product.getIdProduct(), result);
+
+        //Assert
+        assertThat(productModelUpdated).isPresent();
+        assertThat(productModelUpdated.get().getName()).isEqualTo("MackBook Air");
+        assertThat(productModelUpdated.get().getValue()).isEqualTo(new BigDecimal("999"));
+    }
+    @Test
+    public void shouldDeleteProduct(){
+        //Arrange
+        ProductRecordDto newProduct = new ProductRecordDto("Refrigerator", new BigDecimal("1200"));
+        ProductModel product = productService.saveProduct(newProduct);
+        assertThat(productService.findById(product.getIdProduct())).isPresent();
+        //Act
+        productService.deleteProduct(product);
+        Optional<ProductModel> result  = productService.findById(product.getIdProduct());
+
+        //Assert
+        assertThat(result).isEmpty();
+    }
+
 }
