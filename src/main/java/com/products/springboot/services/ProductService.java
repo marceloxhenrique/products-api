@@ -59,7 +59,6 @@ public class ProductService {
         }
         var productModel = product.get();
         BeanUtils.copyProperties(productRecordDto, productModel);
-
         return Optional.of(productRepository.save(productModel));
     }
 
@@ -67,5 +66,4 @@ public class ProductService {
     public void deleteProduct(ProductModel productModel){
         productRepository.delete(productModel);
     }
-
 }
