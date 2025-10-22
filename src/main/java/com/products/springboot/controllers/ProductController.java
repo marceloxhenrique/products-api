@@ -33,11 +33,8 @@ public class ProductController {
 
     @GetMapping("/products/{id}")
     public  ResponseEntity<Object> getOneProduct(@PathVariable(value="id") UUID id){
-        Optional<ProductModel> product = productService.findById(id);
-        if(product.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(product.get());
+        ProductModel product = productService.findById(id);
+        return ResponseEntity.status(HttpStatus.OK).body(product);
     }
 
     @PutMapping("/products/{id}")
@@ -50,11 +47,8 @@ public class ProductController {
     }
     @DeleteMapping("/products/{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable(value = "id") UUID id){
-        Optional<ProductModel> product = productService.findById(id);
-        if(product.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
-        }
-        productService.deleteProduct(product.get());
+        ProductModel product = productService.findById(id);
+        productService.deleteProduct(product);
         return ResponseEntity.status(HttpStatus.OK).body("Product successfully deleted");
     }
 }
