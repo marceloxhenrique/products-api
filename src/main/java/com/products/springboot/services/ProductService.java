@@ -2,6 +2,7 @@ package com.products.springboot.services;
 
 import com.products.springboot.controllers.ProductController;
 import com.products.springboot.dto.ProductRecordDto;
+import com.products.springboot.exceptions.ProductNotFoundException;
 import com.products.springboot.models.ProductModel;
 import com.products.springboot.repositories.ProductRepository;
 import jakarta.transaction.Transactional;
@@ -43,13 +44,9 @@ public class ProductService {
     }
 
     @Transactional
-    public Optional<ProductModel> findById(UUID id){
-        Optional<ProductModel> product = productRepository.findById(id);
-        if (product.isEmpty()) {
-            return  product;
-        }
-        product.get().add(linkTo(methodOn(ProductController.class).getAllProducts()).withRel("Product List"));
-        return  product;
+    public ProductModel findById(UUID id){
+        ProductModel product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException());
+        return  product.add(linkTo(methodOn(ProductController.class).getAllProducts()).withRel("Product List"));
     }
     @Transactional
     public Optional<ProductModel> updateProductById(UUID id, ProductRecordDto productRecordDto){
