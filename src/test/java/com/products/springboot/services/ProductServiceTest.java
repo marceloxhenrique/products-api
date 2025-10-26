@@ -75,12 +75,12 @@ public class ProductServiceTest {
 
         //Act
         ProductRecordDto result = new ProductRecordDto("MackBook Air", new BigDecimal("999"));
-        Optional<ProductModel> productModelUpdated = productService.updateProductById(product.getIdProduct(), result);
+        ProductModel productModelUpdated = productService.updateProductById(product.getIdProduct(), result);
 
         //Assert
-        assertThat(productModelUpdated).isPresent();
-        assertThat(productModelUpdated.get().getName()).isEqualTo("MackBook Air");
-        assertThat(productModelUpdated.get().getValue()).isEqualTo(new BigDecimal("999"));
+        assertThat(productModelUpdated).isNotNull();
+        assertThat(productModelUpdated.getName()).isEqualTo("MackBook Air");
+        assertThat(productModelUpdated.getValue()).isEqualTo(new BigDecimal("999"));
     }
     @Test
     public void shouldDeleteProduct(){
@@ -92,7 +92,6 @@ public class ProductServiceTest {
         productService.deleteProduct(product);
 
         //Assert
-
         assertThatThrownBy(() -> productService.findById(product.getIdProduct()))
                 .isInstanceOf(ProductNotFoundException.class)
                 .hasMessage("Product not found!");

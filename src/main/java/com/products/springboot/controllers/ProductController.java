@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -39,11 +38,8 @@ public class ProductController {
 
     @PutMapping("/products/{id}")
     public ResponseEntity<Object> updateProduct (@PathVariable(value = "id") UUID id, @RequestBody @Valid ProductRecordDto productRecordDto){
-        Optional<ProductModel> product = productService.updateProductById(id, productRecordDto);
-        if(product.isEmpty()){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Product not found");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(product.get());
+        ProductModel product = productService.updateProductById(id, productRecordDto);
+        return ResponseEntity.status(HttpStatus.OK).body(product);
     }
     @DeleteMapping("/products/{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable(value = "id") UUID id){

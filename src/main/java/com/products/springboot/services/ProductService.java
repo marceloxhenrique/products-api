@@ -10,7 +10,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
@@ -49,14 +48,10 @@ public class ProductService {
         return  product.add(linkTo(methodOn(ProductController.class).getAllProducts()).withRel("Product List"));
     }
     @Transactional
-    public Optional<ProductModel> updateProductById(UUID id, ProductRecordDto productRecordDto){
-        Optional<ProductModel> product = productRepository.findById(id);
-        if (product.isEmpty()) {
-            return  product;
-        }
-        var productModel = product.get();
-        BeanUtils.copyProperties(productRecordDto, productModel);
-        return Optional.of(productRepository.save(productModel));
+    public ProductModel updateProductById(UUID id, ProductRecordDto productRecordDto){
+        ProductModel product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException());
+        BeanUtils.copyProperties(productRecordDto, product);
+        return productRepository.save(product);
     }
 
     @Transactional
